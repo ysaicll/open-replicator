@@ -7,6 +7,9 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.code.db.ConMonetDB;
+import com.google.code.db.ConRedis;
+import com.google.code.db.Constant;
 import com.google.code.or.binlog.BinlogEventListener;
 import com.google.code.or.binlog.BinlogEventV4;
 
@@ -18,18 +21,32 @@ public class OpenReplicatorTest {
 	 * 
 	 */
 	public static void main(String args[]) throws Exception {
-		//
+	
 		final OpenReplicator or = new OpenReplicator();
-		or.setUser("nextop");
-		or.setPassword("nextop");
-		or.setHost("192.168.1.216");
-		or.setPort(3306);
-		or.setServerId(6789);
-		or.setBinlogPosition(120);
-		or.setBinlogFileName("mysql-bin.000003");
+	    final ConRedis cr = new ConRedis();
+		or.setUser(Constant.MySQLUser);
+		or.setPassword(Constant.MySQLPwd);
+		or.setHost(Constant.MySQLhost);
+		or.setPort(Constant.MySQLport);
+		or.setServerId(1);
+		or.setBinlogPosition(107);
+		or.setBinlogFileName("binlog.000001");
 		or.setBinlogEventListener(new BinlogEventListener() {
-		    public void onEvents(BinlogEventV4 event) {
-		    	LOGGER.info("{}", event);
+		    public void onEvents(BinlogEventV4 event){
+		        String events = event.toString();
+		    	if(events.contains("Query") && !events.contains("BEGIN")){
+		        	int start = events.lastIndexOf("sql");
+		        	String sql = event.toString().substring(start+4, events.length()-1)+";";
+		        	cr.pushMQ(Constant.Redishost,Constant.Redisport, "sql", sql);
+		        	LOGGER.info("{}", sql);
+		        	try {
+						ConMonetDB.conMonetDB(cr.popMQ(Constant.Redishost, Constant.Redisport, "sql"));
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		    	}	
+		    	
 		    }
 		});
 		or.start();
