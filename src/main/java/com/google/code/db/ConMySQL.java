@@ -4,19 +4,23 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLInput;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class ConMySQL {	
-	public void conMySQL(String dbName) throws Exception{
+	public List<String> getCreateSQL(String dbName) throws Exception{
 		    String driver = "com.mysql.jdbc.Driver";
 		    String url = "jdbc:mysql://localhost:3307/" + dbName;	 
 		    String query = "select table_name from information_schema.tables "
 		    		            + "where table_schema='" + dbName + "'";
 		    List<String> Tables = new ArrayList<String>();
-		    List<String> CreateTables = new ArrayList<String>(); 
+		    List<String> CreateTables = new ArrayList<String>();
+		    StringBuffer sql = new StringBuffer("");
 		    try {
 		        Class.forName(driver);
 		        Connection conn = DriverManager.getConnection(url, Constant.MySQLUser, Constant.MySQLPwd);
@@ -26,24 +30,48 @@ public class ConMySQL {
 			          Tables.add(rs.getString(1));
 	           }
 			   for(String Table : Tables){
-				   ResultSet rs1 = stmt.executeQuery("show create table " + dbName + "." +Table + ";");
+				   ResultSet rs1 = stmt.executeQuery("desc " + dbName + "." + Table + ";");
 				   while(rs1.next()){
-					  int index = rs1.getString(2).lastIndexOf(")");
-				      System.out.println(rs1.getString(2).substring(0, index + 1) + ";");
-			     }
+					   
+					   if(rs1.isLast()){
+						   String field = rs1.getString(1);
+						   String datatype = rs1.getString(2);
+						   if(!datatype.contains("(") ){      						 
+       						   sql.append(field + " " + TypeMatch.getType(datatype.toUpperCase()) + "\n");
+						   }else{
+							   String[] tmp = datatype.split("\\(");
+							   //"(" need Escape			  
+							   sql.append(field + " " + TypeMatch.getType(tmp[0].toUpperCase()) + "(" + tmp[1] + "\n");
+						   }
+					   } else{
+						   String field = rs1.getString(1);
+						   String datatype = rs1.getString(2);
+						   if(!datatype.contains("(") || datatype.contains("int") ){
+       						   sql.append(field + " " + TypeMatch.getType(datatype.toUpperCase()) + "," + "\n");
+						   }else{
+							   String []tmp = datatype.split("\\(");
+							   sql.append(field + " " + TypeMatch.getType(tmp[0].toUpperCase()) + "(" + tmp[1] + "," + "\n");
+						   }
+			            } 
+				   }
+				   CreateTables.add("CREATE TABLE " + Table + "(" + sql.toString() + ");");
+				   sql.delete(0, sql.length());	
 			   }
 		    } catch (ClassNotFoundException e) {            
 		        e.printStackTrace();
 		    } catch (SQLException e) {
 		        e.printStackTrace();
 		    }	
-		    
+		    return CreateTables;
     }
 	
 	public static void main(String[] args) {
 		ConMySQL cMySQL = new ConMySQL();
+		List<String>teStrings = new ArrayList<String>();
 		try {
-			cMySQL.conMySQL("company");
+			teStrings = cMySQL.getCreateSQL("wb");
+			for(String te : teStrings)
+				System.out.println(te);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
