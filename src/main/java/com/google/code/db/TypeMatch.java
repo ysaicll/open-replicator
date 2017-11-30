@@ -15,6 +15,7 @@ public class TypeMatch {
 		type.put("SMALLINT", "SMALLINT");
 		type.put("MEDIUMINT", "INT");
 		type.put("INT(11)", "INT");
+		type.put("INT(1)", "INT");
 		type.put("BIGINT(20)", "BIGINT");
 		type.put("FLOAT", "FLOAT");
 		type.put("DOUBLE", "DOUBLE");

@@ -1,0 +1,17 @@
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n
+#logback.classic pattern: %d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n

@@ -36,7 +36,7 @@ public class ConMySQL {
 					   if(rs1.isLast()){
 						   String field = rs1.getString(1);
 						   String datatype = rs1.getString(2);
-						   if(!datatype.contains("(") ){      						 
+						   if(!datatype.contains("(") || datatype.contains("int") ){      						 
        						   sql.append(field + " " + TypeMatch.getType(datatype.toUpperCase()) + "\n");
 						   }else{
 							   String[] tmp = datatype.split("\\(");

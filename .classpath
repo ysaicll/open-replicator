@@ -27,5 +27,9 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="X:/Github/open-replicator/target/open-replicator-1.0.7.jar"/>
+	<classpathentry kind="lib" path="X:/temp/jedis-2.9.0.jar" sourcepath="X:/temp/jedis-jedis-2.9.0.zip"/>
+	<classpathentry kind="lib" path="X:/temp/mysql-connector-java-5.1.44-bin.jar"/>
+	<classpathentry kind="lib" path="X:/temp/MonetDB/monetdb-jdbc-2.27.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
