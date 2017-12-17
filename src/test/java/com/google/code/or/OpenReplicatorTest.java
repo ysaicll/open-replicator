@@ -12,6 +12,7 @@ import org.omg.CORBA.INTERNAL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.code.db.ConMariadb;
 import com.google.code.db.ConMonetDB;
 import com.google.code.db.ConRedis;
 import com.google.code.db.Constant;
@@ -27,7 +28,7 @@ public class OpenReplicatorTest {
 	    final ConRedis cr = new ConRedis();
 	    Map<Integer, String>DBMap = new HashMap<>();
 	    Map<Integer, String>TableMap = new HashMap<>();
-		Map<Integer, Integer>tmpColume = new HashMap<>();
+		final Map<Integer, Integer>tmpColumn = new HashMap<>();
 	    or.setUser(Constant.MySQLUser);
 		or.setPassword(Constant.MySQLPwd);
 		or.setHost(Constant.MySQLhost);
@@ -39,33 +40,63 @@ public class OpenReplicatorTest {
 		    public void onEvents(BinlogEventV4 event){
 		        String events = event.toString();
 		    	String header = events.substring(0, events.indexOf('='));
-		    	System.out.println(events);
-		    	String SQL = "";
+//		    	System.out.println(events);
+		    	//SQL appears in log
+		    	String NorSQL = "";
 		    	switch (header) {
 				case "QueryEventheader":
 					int index = events.lastIndexOf("sql");
 					String statement = events.substring(index + 4);
-					if(!statement.contains("BEGIN")) {
-					SQL = SQL + statement + Constant.Semicolon + "\n";
+					if (statement.contains("BEGIN")) {
+					    break;
 					}
-					System.out.println(SQL);
+					if(!statement.contains("BEGIN")) {
+					    NorSQL = NorSQL + statement + Constant.Semicolon;
+					}					
+					System.out.println(NorSQL);			
 					break;
                 case "XidEventheader":
                 	//TODO trans to MQ
                     break;
                 case "TableMapEventheader":
                 	/*match column type*/
+                	int i = 1;
+                	Pattern p_map = Pattern.compile("(?<=es\\=\\[).*?(?=\\])");
+                	Matcher m_map = p_map.matcher(events);
+                	if(m_map.find()){
+                		String types[] = m_map.group().split("\\,"); 
+                	for(String type : types){
+                	   //System.out.println(type.replace(" ", ""));
+                	   tmpColumn.put(i, Integer.parseInt(type.replace(" ", ""))); 
+                	   i ++;
+                	   }
+                	}
                 	break;
                 case "WriteRowsEventheader":
                 	/*match column values*/
                 	StringBuffer values = new StringBuffer("VALUES ");
-                	Pattern pattern = Pattern.compile("(?<=ns\\=\\[).*?(?=\\])");
-                	Matcher matcher = pattern.matcher(events);
-                	while(matcher.find()){
-                		values.append(Toolmethod.addPar(matcher.group(0)))
-                		      .append(Constant.Comma);
+                	Pattern p_write = Pattern.compile("(?<=ns\\=\\[).*?(?=\\])");
+                	Matcher m_write = p_write.matcher(events);
+                	String result = "";
+                	while(m_write.find()){
+                		String value[] = m_write.group().split("\\,");
+                		for (int j=0; j<value.length; j++){
+                			if(tmpColumn.get(j+1) > 9){
+                				result += Toolmethod.addApos(value[j].replace(" ", "")) + Constant.Comma;
+                			}else {
+								result += value[j].replace(" ", "") + Constant.Comma;
+							}                			
+                		}       
+                		values.append(Toolmethod.addPar(result.substring(0, result.length() - 1)))
+          		              .append(Constant.Comma);
+            			result = "";
                 	}
-                	System.out.println(Constant.Insval + " tbname " + values.toString().substring(0, values.toString().length()-1) + Constant.Semicolon);
+                	tmpColumn.clear();
+            		i = 1;
+                	//SQL that was rebuild
+                	String SpSQL = Constant.Insval + " tbname " + values.toString().substring(0, values.toString().length()-1)
+                			+ Constant.Semicolon;                	
+                	System.out.println(SpSQL);
                 case "RotateEventheader":
                 	//DO Nothing
                 	break;
@@ -76,7 +107,7 @@ public class OpenReplicatorTest {
 					break;
 				}
 		        	//LOGGER.info("{}", event);		        			        	
-		    	}			    	
+ 		    	}			    	
 		    
 		});
 		or.start();
