@@ -59,12 +59,12 @@ public final class QueryEvent extends AbstractBinlogEventV4 {
 	public String toString() {
 		return new ToStringBuilder(this)
 		.append("header", header)
-		.append("threadId", threadId)
-		.append("elapsedTime", elapsedTime)
-		.append("databaseNameLength", databaseNameLength)
-		.append("errorCode", errorCode)
-		.append("statusVariablesLength", statusVariablesLength)
-		.append("statusVariables", statusVariables)
+//		.append("threadId", threadId)
+//		.append("elapsedTime", elapsedTime)
+//		.append("databaseNameLength", databaseNameLength)
+//		.append("errorCode", errorCode)
+//		.append("statusVariablesLength", statusVariablesLength)
+//		.append("statusVariables", statusVariables)
 		.append("databaseName", databaseName)
 		.append("sql", sql).toString();
 	}

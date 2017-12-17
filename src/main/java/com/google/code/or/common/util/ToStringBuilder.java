@@ -30,7 +30,9 @@ public final class ToStringBuilder {
 	 */
 	public ToStringBuilder(Object object) {
 		String name = ClassUtils.getShortClassName(object.getClass().getName());
-		this.builder = new StringBuilder(32); this.builder.append(name).append("[");
+		this.builder = new StringBuilder(32);
+		//this.builder.append(name).append("[");
+		this.builder.append(name);
 	}
 
 	/**
@@ -38,7 +40,8 @@ public final class ToStringBuilder {
 	 */
 	@Override
 	public String toString() {
-		return this.builder.append("]").toString();
+		//return this.builder.append("]").toString();
+		return this.builder.toString();
 	}
 
 	/**

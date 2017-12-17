@@ -15,7 +15,7 @@ import java.util.Map;
 public class ConMySQL {	
 	public List<String> getCreateSQL(String dbName) throws Exception{
 		    String driver = "com.mysql.jdbc.Driver";
-		    String url = "jdbc:mysql://localhost:3307/" + dbName;	 
+		    String url = "jdbc:mysql://120.24.98.91:3306/" + dbName;	 
 		    String query = "select table_name from information_schema.tables "
 		    		            + "where table_schema='" + dbName + "'";
 		    List<String> Tables = new ArrayList<String>();
@@ -31,8 +31,7 @@ public class ConMySQL {
 	           }
 			   for(String Table : Tables){
 				   ResultSet rs1 = stmt.executeQuery("desc " + dbName + "." + Table + ";");
-				   while(rs1.next()){
-					   
+				   while(rs1.next()){				   
 					   if(rs1.isLast()){
 						   String field = rs1.getString(1);
 						   String datatype = rs1.getString(2);
@@ -69,7 +68,7 @@ public class ConMySQL {
 		ConMySQL cMySQL = new ConMySQL();
 		List<String>teStrings = new ArrayList<String>();
 		try {
-			teStrings = cMySQL.getCreateSQL("wb");
+			teStrings = cMySQL.getCreateSQL("employees");
 			for(String te : teStrings)
 				System.out.println(te);
 		} catch (Exception e) {

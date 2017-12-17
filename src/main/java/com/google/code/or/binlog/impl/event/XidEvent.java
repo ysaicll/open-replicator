@@ -17,6 +17,7 @@
 package com.google.code.or.binlog.impl.event;
 
 import com.google.code.or.binlog.BinlogEventV4Header;
+import com.google.code.or.common.glossary.column.StringColumn;
 import com.google.code.or.common.util.MySQLConstants;
 import com.google.code.or.common.util.ToStringBuilder;
 
@@ -34,7 +35,8 @@ public final class XidEvent extends AbstractBinlogEventV4 {
 	
 	//
 	private long xid;
-	
+	private StringColumn databaseName;
+	private StringColumn sql;
 	/**
 	 * 
 	 */
@@ -52,7 +54,8 @@ public final class XidEvent extends AbstractBinlogEventV4 {
 	public String toString() {
 		return new ToStringBuilder(this)
 		.append("header", header)
-		.append("xid", xid).toString();
+		.append("xid", xid)
+		.append("sql", "COMMIT").toString();
 	}
 	
 	/**
@@ -61,7 +64,6 @@ public final class XidEvent extends AbstractBinlogEventV4 {
 	public long getXid() {
 		return xid;
 	}
-
 	public void setXid(long xid) {
 		this.xid = xid;
 	}

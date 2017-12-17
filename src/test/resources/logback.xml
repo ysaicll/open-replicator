@@ -1,18 +1,18 @@
 <configuration>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder>
+     <encoder>
       <pattern>%d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n</pattern>
       <outputPatternAsHeader>true</outputPatternAsHeader>
       <immediateFlush>true</immediateFlush>
-    </encoder>
+    </encoder>  
   </appender>
   
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>${APP_HOME}/log/${APP_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>D:/Log/log/%d{yyyy-MM-dd}.log</fileNamePattern>
     </rollingPolicy>
-    <encoder>
+  <encoder>
       <pattern>%d{yy-MM-dd HH:mm:ss.SSS} %-5level[%thread %logger{0}.%M:%L]%marker %msg%n</pattern>
       <outputPatternAsHeader>true</outputPatternAsHeader>
       <immediateFlush>true</immediateFlush>
@@ -21,5 +21,6 @@
   
   <root level="INFO">
     <appender-ref ref="STDOUT" />
+    <appender-ref ref="FILE" />
   </root>
 </configuration>
